@@ -6,7 +6,7 @@ class World:
 
     def __init__(self):
         self.anthill = (200, 200)
-        self.food = [(100, 300), (500, 400), (330, 170)]
+        self.food = [(100, 300), (400, 300), (330, 170)]
         self.height = 500
         self.width = 600
         self.pheromones = [[0 for y in range(self.height)] for x in range(self.width)]
@@ -14,8 +14,8 @@ class World:
         for x in range(len(self.pheromones)):
             for y in range(len(self.pheromones[x])):
                 self.pheromones[x][y] = 0.01
-        self.alpha = 2
-        self.rho = 0.002
+        self.alpha = 1.3
+        self.rho = 0.005
         self.step_size = 5
 
     def is_food_source(self, position):

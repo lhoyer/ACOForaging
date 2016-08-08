@@ -13,7 +13,7 @@ class ACOLogic(QObject):
         QObject.__init__(self)
         self.world = World()
         self.ants = None
-        self.create_ants(100)
+        self.create_ants(200)
         self.timer = QTimer()
 
     def create_ants(self, num):
