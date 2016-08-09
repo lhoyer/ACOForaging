@@ -4,6 +4,7 @@ from PyQt4.QtCore import pyqtSignal
 
 from aco.ant import Ant
 from aco.world import World
+from gui.settings import settings
 
 
 class ACOLogic(QObject):
@@ -12,8 +13,7 @@ class ACOLogic(QObject):
     def __init__(self):
         QObject.__init__(self)
         self.world = World()
-        self.ants = None
-        self.create_ants(200)
+        self.ants = []
         self.timer = QTimer()
 
     def create_ants(self, num):
@@ -22,6 +22,7 @@ class ACOLogic(QObject):
             self.ants.append(Ant(self.world, self.world.anthill[0], self.world.anthill[1]))
 
     def start_simulation(self):
+        self.create_ants(settings.num_ants)
         self.timer.timeout.connect(self.simulate_step)
         self.timer.start(20)
 

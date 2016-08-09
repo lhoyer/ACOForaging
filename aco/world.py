@@ -1,6 +1,8 @@
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
 
+from gui.settings import settings
+
 
 class World:
 
@@ -9,13 +11,13 @@ class World:
         self.food = [(100, 300), (400, 300), (330, 170)]
         self.height = 500
         self.width = 600
+        self.obstacles = QImage(self.width, self.height, QImage.Format_RGB32)
+        self.obstacles.invertPixels()
         self.pheromones = [[0 for y in range(self.height)] for x in range(self.width)]
         self.max_pheromones = 0.1
         for x in range(len(self.pheromones)):
             for y in range(len(self.pheromones[x])):
                 self.pheromones[x][y] = 0.01
-        self.alpha = 1.3
-        self.rho = 0.005
         self.step_size = 5
 
     def is_food_source(self, position):
@@ -60,11 +62,11 @@ class World:
         return num / denom"""
 
     def get_probability(self, start, end):
-        num = self.pheromones[end[0]][end[1]] ** self.alpha
+        num = self.pheromones[end[0]][end[1]] ** settings.alpha
         denom = 0
         transitions = self.get_transitions(start)
         for t in transitions:
-            denom += self.pheromones[t[0]][t[1]] ** self.alpha
+            denom += self.pheromones[t[0]][t[1]] ** settings.alpha
         return num / denom
 
     def release_pheromones(self, position, concentration):
@@ -75,12 +77,14 @@ class World:
     def evaporation(self):
         for x in range(0, len(self.pheromones), self.step_size):
             for y in range(0, len(self.pheromones[x]), self.step_size):
-                self.pheromones[x][y] *= 1 - self.rho
+                self.pheromones[x][y] *= 1 - settings.rho
                 if self.pheromones[x][y] <= 0.01:
                     self.pheromones[x][y] = 0.01
 
     def paint(self, painter):
         painter.save()
+        # Draw obstacles
+        painter.drawImage(0, 0, self.obstacles)
         # Draw pheromones
         for x in range(0, len(self.pheromones), self.step_size):
             for y in range(0, len(self.pheromones[x]), self.step_size):
