@@ -30,13 +30,13 @@ class World:
         transitions = []
         x = actual_position[0]
         y = actual_position[1]
-        if x+self.step_size < self.width:
+        if x+self.step_size < self.width and not self.is_obstacle(x+self.step_size, y):
             transitions.append((x+self.step_size, y))
-        if y+self.step_size < self.height:
+        if y+self.step_size < self.height and not self.is_obstacle(x, y+self.step_size):
             transitions.append((x, y+self.step_size))
-        if x-self.step_size >= 0:
+        if x-self.step_size >= 0 and not self.is_obstacle(x-self.step_size, y):
             transitions.append((x-self.step_size, y))
-        if y-self.step_size >= 0:
+        if y-self.step_size >= 0 and not self.is_obstacle(x, y-self.step_size):
             transitions.append((x, y-self.step_size))
         return transitions
 
@@ -80,6 +80,24 @@ class World:
                 self.pheromones[x][y] *= 1 - settings.rho
                 if self.pheromones[x][y] <= 0.01:
                     self.pheromones[x][y] = 0.01
+        self.max_pheromones *= 1 - settings.rho
+
+    def add_obstacle(self, x, y):
+        painter = QPainter(self.obstacles)
+        pen = QPen(QColor(Qt.blue), 5)
+        painter.setPen(pen)
+        painter.drawPoint(x, y)
+        painter.end()
+
+    def remove_obstacle(self, x, y):
+        painter = QPainter(self.obstacles)
+        pen = QPen(QColor(Qt.white), 5)
+        painter.setPen(pen)
+        painter.drawPoint(x, y)
+        painter.end()
+
+    def is_obstacle(self, x, y):
+        return self.obstacles.pixel(x, y) == qRgb(0, 0, 255)
 
     def paint(self, painter):
         painter.save()

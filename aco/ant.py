@@ -49,7 +49,7 @@ class Ant:
 
         chosen_transition = self.position
         num_of_iterations = 0
-        while chosen_transition in self.track[-10:] and num_of_iterations < 5:
+        while chosen_transition in self.track[-10:] and num_of_iterations < 10:
             num_of_iterations += 1
             decision = random.random()
             p = 0
@@ -82,7 +82,7 @@ class Ant:
         if self.state == AntState.searching:
             painter.setBrush(QBrush(QColor(0, 0, 0)))
         else:
-            painter.setBrush(QBrush(QColor(255, 0, 255)))
+            painter.setBrush(QBrush(Qt.yellow))
         painter.setPen(QPen(QColor(Qt.black), 1))
         painter.drawEllipse(QRectF(self.position[0] - 2, self.position[1] - 2, 4, 4))
         painter.restore()
