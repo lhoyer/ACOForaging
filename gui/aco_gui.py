@@ -20,6 +20,7 @@ class ACOGui(QMainWindow):
         self.ui.widget.set_aco(self.acoLogic)
 
         self.ui.startButton.clicked.connect(self.start_simulation)
+        self.ui.resetPheromonesButton.clicked.connect(self.acoLogic.world.reset_pheromones)
         self.ui.antNumSpin.valueChanged.connect(self.ant_number_changed)
         self.ui.alphaSpin.valueChanged.connect(self.alpha_changed)
         self.ui.rhoSpin.valueChanged.connect(self.rho_changed)

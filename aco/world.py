@@ -14,11 +14,15 @@ class World:
         self.obstacles = QImage(self.width, self.height, QImage.Format_RGB32)
         self.obstacles.invertPixels()
         self.pheromones = [[0 for y in range(self.height)] for x in range(self.width)]
+        self.max_pheromones = None
+        self.reset_pheromones()
+        self.step_size = 5
+
+    def reset_pheromones(self):
         self.max_pheromones = 0.1
         for x in range(len(self.pheromones)):
             for y in range(len(self.pheromones[x])):
                 self.pheromones[x][y] = 0.01
-        self.step_size = 5
 
     def is_food_source(self, position):
         for f in self.food:

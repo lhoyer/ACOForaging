@@ -38,6 +38,20 @@
        </widget>
       </item>
       <item>
+       <widget class="QPushButton" name="resetButton">
+        <property name="text">
+         <string>Reset</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="resetPheromonesButton">
+        <property name="text">
+         <string>Reset pheromones</string>
+        </property>
+       </widget>
+      </item>
+      <item>
        <widget class="QGroupBox" name="groupBox">
         <property name="title">
          <string>Visualization</string>
@@ -88,7 +102,7 @@
             <double>100.000000000000000</double>
            </property>
            <property name="singleStep">
-            <double>1.000000000000000</double>
+            <double>0.500000000000000</double>
            </property>
            <property name="value">
             <double>2.000000000000000</double>
@@ -96,14 +110,14 @@
           </widget>
          </item>
          <item row="2" column="0">
-          <widget class="QLabel" name="rhoSpin">
+          <widget class="QLabel" name="rhoLabel">
            <property name="text">
             <string>Evaporation coefficient</string>
            </property>
           </widget>
          </item>
          <item row="2" column="1">
-          <widget class="QDoubleSpinBox" name="doubleSpinBox_2">
+          <widget class="QDoubleSpinBox" name="rhoSpin">
            <property name="decimals">
             <number>3</number>
            </property>
@@ -114,7 +128,7 @@
             <double>0.001000000000000</double>
            </property>
            <property name="value">
-            <double>0.005000000000000</double>
+            <double>0.002000000000000</double>
            </property>
           </widget>
          </item>
