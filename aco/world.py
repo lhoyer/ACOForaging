@@ -20,6 +20,9 @@ class World:
         self.max_pheromones = None
         self.reset_pheromones()
 
+    def reset(self):
+        self.reset_pheromones()
+
     def reset_pheromones(self):
         self.max_pheromones = 0.1
         for x in range(len(self.pheromones)):

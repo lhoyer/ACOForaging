@@ -19,6 +19,10 @@ class Ant:
         self.state = AntState.searching
         self.pheromone_concentration = 0
 
+    def reset(self):
+        self.state = AntState.searching
+        self.pheromone_concentration = 0
+
     def move_to(self, pos):
         self.position = pos
         self.track.append(pos)

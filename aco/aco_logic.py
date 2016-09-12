@@ -17,6 +17,17 @@ class ACOLogic(QObject):
         self.ants = []
         self.timer = QTimer()
 
+    def reset(self):
+        self.world.reset()
+        self.ants = []
+        self.timer = QTimer()
+        self.ui_update_required.emit()
+
+    def reset_pheromones(self):
+        self.world.reset_pheromones()
+        for a in self.ants:
+            a.reset()
+
     def create_ants(self, num):
         self.ants = []
         for i in range(num):
@@ -25,7 +36,7 @@ class ACOLogic(QObject):
     def start_simulation(self):
         self.create_ants(settings.num_ants)
         self.timer.timeout.connect(self.simulate_step)
-        self.timer.start(20)
+        self.timer.start(5)
 
     def simulate_step(self):
         for a in self.ants:
