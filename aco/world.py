@@ -6,17 +6,19 @@ from gui.settings import settings
 
 class World:
 
-    def __init__(self):
-        self.anthill = (200, 200)
-        self.food = [(100, 300), (400, 300), (330, 170)]
-        self.height = 500
-        self.width = 600
-        self.obstacles = QImage(self.width, self.height, QImage.Format_RGB32)
+    def __init__(self, scale):
+        self.anthill = (20, 20)
+        # self.food = [(100, 300), (400, 300), (330, 170)]
+        self.food = [(40, 20), (20, 40)]
+        self.height = 60
+        self.width = 80
+        self.scale = scale
+        self.step_size = 1
+        self.obstacles = QImage(self.width*self.scale, self.height*self.scale, QImage.Format_RGB32)
         self.obstacles.invertPixels()
         self.pheromones = [[0 for y in range(self.height)] for x in range(self.width)]
         self.max_pheromones = None
         self.reset_pheromones()
-        self.step_size = 5
 
     def reset_pheromones(self):
         self.max_pheromones = 0.1
@@ -88,20 +90,20 @@ class World:
 
     def add_obstacle(self, x, y):
         painter = QPainter(self.obstacles)
-        pen = QPen(QColor(Qt.blue), 5)
+        pen = QPen(QColor(Qt.blue), self.scale)
         painter.setPen(pen)
         painter.drawPoint(x, y)
         painter.end()
 
     def remove_obstacle(self, x, y):
         painter = QPainter(self.obstacles)
-        pen = QPen(QColor(Qt.white), 5)
+        pen = QPen(QColor(Qt.white), self.scale)
         painter.setPen(pen)
         painter.drawPoint(x, y)
         painter.end()
 
     def is_obstacle(self, x, y):
-        return self.obstacles.pixel(x, y) == qRgb(0, 0, 255)
+        return self.obstacles.pixel(x*self.scale, y*self.scale) == qRgb(0, 0, 255)
 
     def paint(self, painter):
         painter.save()
@@ -115,14 +117,18 @@ class World:
                 col_alpha = self.pheromones[x][y] / self.max_pheromones * 255
                 painter.setPen(QPen(QColor(255, 0, 0, col_alpha), 1))
                 painter.setBrush(QBrush(QColor(255, 0, 0, col_alpha), 1))
-                painter.drawEllipse(QRectF(x - 2, y - 2, 4, 4))
+                painter.drawEllipse(QRectF(self.scale*(x - 0.5), self.scale*(y - 0.5), self.scale, self.scale))
         # Draw anthill
         painter.setBrush(QBrush(QColor(255, 0, 0)))
         painter.setPen(QPen(QColor(Qt.black), 1))
-        painter.drawEllipse(QRectF(self.anthill[0] - 6, self.anthill[1] - 6, 12, 12))
+        painter.drawEllipse(QRectF(self.scale*(self.anthill[0] - 0.75),
+                                   self.scale*(self.anthill[1] - 0.75),
+                                   1.5*self.scale, 1.5*self.scale))
         # Draw food sources
         painter.setBrush(QBrush(QColor(0, 255, 0)))
         painter.setPen(QPen(QColor(Qt.black), 1))
         for f in self.food:
-            painter.drawEllipse(QRectF(f[0] - 4, f[1] - 4, 8, 8))
+            painter.drawEllipse(QRectF(self.scale*(f[0] - 0.6),
+                                       self.scale*(f[1] - 0.6),
+                                       1.2*self.scale, 1.2*self.scale))
         painter.restore()

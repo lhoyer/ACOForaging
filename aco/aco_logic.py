@@ -12,7 +12,8 @@ class ACOLogic(QObject):
 
     def __init__(self):
         QObject.__init__(self)
-        self.world = World()
+        self.scale = 8
+        self.world = World(self.scale)
         self.ants = []
         self.timer = QTimer()
 
@@ -35,4 +36,4 @@ class ACOLogic(QObject):
     def paint(self, painter):
         self.world.paint(painter)
         for a in self.ants:
-            a.paint(painter)
+            a.paint(painter, self.scale)
