@@ -16,6 +16,7 @@ class ACOLogic(QObject):
         self.world = World(self.scale)
         self.ants = []
         self.timer = QTimer()
+        self.simulation_enabled = True
 
     def reset(self):
         self.world.reset()
@@ -33,12 +34,21 @@ class ACOLogic(QObject):
         for i in range(num):
             self.ants.append(Ant(self.world, self.world.anthill[0], self.world.anthill[1]))
 
-    def start_simulation(self):
+    def start_simulation(self, timeout):
         self.create_ants(settings.num_ants)
         self.timer.timeout.connect(self.simulate_step)
-        self.timer.start(5)
+        self.timer.start(timeout)
+
+    def set_simulation_enabled(self, enabled):
+        self.simulation_enabled = enabled
+
+    def set_simulation_speed(self, value):
+        self.timer.stop()
+        self.timer.start(value)
 
     def simulate_step(self):
+        if not self.simulation_enabled:
+            return
         for a in self.ants:
             a.simulate_step()
         self.world.evaporation()
@@ -46,5 +56,6 @@ class ACOLogic(QObject):
 
     def paint(self, painter):
         self.world.paint(painter)
-        for a in self.ants:
-            a.paint(painter, self.scale)
+        if settings.draw_ants:
+            for a in self.ants:
+                a.paint(painter, self.scale)

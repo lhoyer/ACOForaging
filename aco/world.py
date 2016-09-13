@@ -80,6 +80,8 @@ class World:
 
     def release_pheromones(self, position, concentration):
         self.pheromones[position[0]][position[1]] += concentration
+        # if self.pheromones[position[0]][position[1]] > 1:
+        #     self.pheromones[position[0]][position[1]] = 1
         if self.pheromones[position[0]][position[1]] > self.max_pheromones:
             self.max_pheromones = self.pheromones[position[0]][position[1]]
 
@@ -113,14 +115,15 @@ class World:
         # Draw obstacles
         painter.drawImage(0, 0, self.obstacles)
         # Draw pheromones
-        for x in range(0, len(self.pheromones), self.step_size):
-            for y in range(0, len(self.pheromones[x]), self.step_size):
-                if self.pheromones[x][y] <= 0.01:
-                    continue
-                col_alpha = self.pheromones[x][y] / self.max_pheromones * 255
-                painter.setPen(QPen(QColor(255, 0, 0, col_alpha), 1))
-                painter.setBrush(QBrush(QColor(255, 0, 0, col_alpha), 1))
-                painter.drawEllipse(QRectF(self.scale*(x - 0.5), self.scale*(y - 0.5), self.scale, self.scale))
+        if settings.draw_pheromones:
+            for x in range(0, len(self.pheromones), self.step_size):
+                for y in range(0, len(self.pheromones[x]), self.step_size):
+                    if self.pheromones[x][y] <= 0.01:
+                        continue
+                    col_alpha = self.pheromones[x][y] / self.max_pheromones * 255
+                    painter.setPen(QPen(QColor(255, 0, 0, col_alpha), 1))
+                    painter.setBrush(QBrush(QColor(255, 0, 0, col_alpha), 1))
+                    painter.drawEllipse(QRectF(self.scale*(x - 0.5), self.scale*(y - 0.5), self.scale, self.scale))
         # Draw anthill
         painter.setBrush(QBrush(QColor(255, 0, 0)))
         painter.setPen(QPen(QColor(Qt.black), 1))

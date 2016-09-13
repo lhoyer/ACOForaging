@@ -20,8 +20,12 @@ class ACOGui(QMainWindow):
         self.ui.widget.set_aco(self.acoLogic)
 
         self.ui.startButton.clicked.connect(self.start_simulation)
+        self.ui.pauseButton.clicked.connect(self.pause_simulation)
         self.ui.resetButton.clicked.connect(self.acoLogic.reset)
         self.ui.resetPheromonesButton.clicked.connect(self.acoLogic.reset_pheromones)
+        self.ui.speedSpinBox.valueChanged.connect(self.simulation_speed_changed)
+        self.ui.antCheckbox.clicked.connect(self.draw_ants_changed)
+        self.ui.pheromonesCheckbox.clicked.connect(self.draw_pheromones_changed)
         self.ui.antNumSpin.valueChanged.connect(self.ant_number_changed)
         self.ui.alphaSpin.valueChanged.connect(self.alpha_changed)
         self.ui.rhoSpin.valueChanged.connect(self.rho_changed)
@@ -30,7 +34,21 @@ class ACOGui(QMainWindow):
         settings.rho = self.ui.rhoSpin.value()
 
     def start_simulation(self):
-        self.acoLogic.start_simulation()
+        self.acoLogic.start_simulation(self.ui.speedSpinBox.value())
+
+    def simulation_speed_changed(self, value):
+        self.acoLogic.set_simulation_speed(value)
+
+    def pause_simulation(self, enabled):
+        self.acoLogic.set_simulation_enabled(not enabled)
+
+    @staticmethod
+    def draw_ants_changed(value):
+        settings.draw_ants = value
+
+    @staticmethod
+    def draw_pheromones_changed(value):
+        settings.draw_pheromones = value
 
     @staticmethod
     def ant_number_changed(value):
